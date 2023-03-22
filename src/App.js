@@ -6,7 +6,7 @@ import Time from './component/time/Time';
 function App() {
   return (
     <div className="App">
-      <Highlight />
+      <Time />
 
       {/*<Highlight />*/}
       {/*<Time />*/}

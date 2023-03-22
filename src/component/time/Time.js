@@ -1,11 +1,15 @@
 import './Time.css';
 import React, {useState} from 'react';
 
-function DateTime(props) {
+function DateTimePretty(props) {
+  
   var today = new Date();
   var date = new Date(props.date);
+  
   var displayDate = '';
+  
   var diffDay = Math.ceil(Math.abs(today.getTime() - date.getTime()) / (1000 * 3600 * 24));
+  
   if (diffDay < 28 || ((today.getDate() >= date.getDate()) && (today.getMonth() == date.getMonth())&& (today.getFullYear() == date.getFullYear())) || ((today.getDate() <= date.getDate()) && (Math.abs(today.getMonth() - date.getMonth()) == 1))) {
     var prefix = ' дней ';
     if (diffDay <= 10 && diffDay >= 20) {
@@ -53,8 +57,11 @@ function DateTime(props) {
       }
     }
     displayDate = year + prefix + 'назад';
+
   } else {
+    
     var month = today.getMonth() - date.getMonth();
+    
     if ((today.getDate() <= date.getDate()) && (Math.abs(today.getFullYear() - date.getFullYear()) == 1)) {
       month++;
     }
@@ -85,9 +92,15 @@ function DateTime(props) {
     displayDate = month + prefix + 'назад';
   }
   
-  console.log(today.getFullYear() +' - '+ date.getFullYear() +' ___ '+ today.getMonth() +' - '+ date.getMonth() +' ___ '+ today.getDate() +' - '+ date.getDate())
+  const newProps = {date: displayDate}
   return (
-    <p className="date">{displayDate}</p>
+    <DateTime date={props.date} {...newProps}/>
+  )
+}
+
+function DateTime(props) {
+  return (
+    <p className="date">{props.date}</p>
   )
 }
 
@@ -95,7 +108,7 @@ function Video(props) {
     return (
         <div className="video">
             <iframe src={props.url} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            <DateTime date={props.date} />
+            <DateTimePretty date={props.date} />
         </div>
     )
 }
