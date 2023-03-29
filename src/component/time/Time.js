@@ -1,102 +1,20 @@
 import './Time.css';
-import React, {useState} from 'react';
+import React, {Component, useState} from 'react';
+import moment from 'moment';
+import 'moment/locale/ru';
 
-function DateTimePretty(props) {
+const DateTimePretty = (Component) => {
   
-  var today = new Date();
-  var date = new Date(props.date);
+  return (props) => {
+    var date = new Date(props.date);
   
-  var displayDate = '';
-  
-  var diffDay = Math.ceil(Math.abs(today.getTime() - date.getTime()) / (1000 * 3600 * 24));
-  
-  if (diffDay < 28 || ((today.getDate() >= date.getDate()) && (today.getMonth() == date.getMonth())&& (today.getFullYear() == date.getFullYear())) || ((today.getDate() <= date.getDate()) && (Math.abs(today.getMonth() - date.getMonth()) == 1))) {
-    var prefix = ' дней ';
-    if (diffDay <= 10 && diffDay >= 20) {
-      switch (diffDay % 10) {
-        case 1:
-          prefix = ' день '
-          break;
-        case 2:
-          prefix = ' дня '
-          break;
-        case 3:
-          prefix = ' дня '
-          break;
-        case 4:
-          prefix = ' дня '
-          break;
-
-        default:
-          prefix = ' дней '
-          break;
-      }
-    }
-    displayDate = diffDay + prefix + 'назад';
-  } else if (diffDay >= 365){
-    var year = today.getFullYear() - date.getFullYear();
-    var prefix = ' лет ';
-    if (year <= 10 || year >= 20) {
-      switch (year % 10) {
-        case 1:
-          prefix = ' год '
-          break;
-        case 2:
-          prefix = ' года '
-          break;
-        case 3:
-          prefix = ' года '
-          break;
-        case 4:
-          prefix = ' года '
-          break;
-
-        default:
-          prefix = ' лет '
-          break;
-      }
-    }
-    displayDate = year + prefix + 'назад';
-
-  } else {
+    const newProps = {date: moment(date, "YYYYMMDD").fromNow()}
     
-    var month = today.getMonth() - date.getMonth();
-    
-    if ((today.getDate() <= date.getDate()) && (Math.abs(today.getFullYear() - date.getFullYear()) == 1)) {
-      month++;
-    }
-    if (month < 0) {
-      month += 12;
-    }
-    var prefix = ' месяцев ';
-    if (month <= 10) {
-      switch (month % 10) {
-        case 1:
-          prefix = ' месяц '
-          break;
-        case 2:
-          prefix = ' месяца '
-          break;
-        case 3:
-          prefix = ' месяца '
-          break;
-        case 4:
-          prefix = ' месяца '
-          break;
-
-        default:
-          prefix = ' месяцев '
-          break;
-      }
-    }
-    displayDate = month + prefix + 'назад';
+    return <Component {...newProps}/>
   }
-  
-  const newProps = {date: displayDate}
-  return (
-    <DateTime date={props.date} {...newProps}/>
-  )
 }
+
+const FormatDate = DateTimePretty(DateTime);
 
 function DateTime(props) {
   return (
@@ -108,7 +26,7 @@ function Video(props) {
     return (
         <div className="video">
             <iframe src={props.url} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            <DateTimePretty date={props.date} />
+            <FormatDate date={props.date} />
         </div>
     )
 }
